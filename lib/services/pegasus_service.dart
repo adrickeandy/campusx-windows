@@ -16,6 +16,14 @@ class PegasusException implements Exception {
 
 class _RateLimitException implements Exception {}
 
+/// A request-level failure that would fail identically on every key (e.g. a
+/// malformed request body, or an invalid/revoked API key returning 400/401/403).
+/// Not worth burning the remaining keys retrying it.
+class _PermanentException implements Exception {
+  final String message;
+  _PermanentException(this.message);
+}
+
 /// Pegasus — CampusX's built-in AI assistant.
 ///
 /// Wraps the Gemini API with:
@@ -122,8 +130,16 @@ Pegasus; never mention Gemini or Google's model names.
       } on _RateLimitException {
         lastError = PegasusException('All configured Pegasus keys are rate-limited.');
         continue;
-      } on PegasusException {
-        rethrow;
+      } on _PermanentException catch (e) {
+        // Not worth retrying on other keys — the request itself is invalid
+        // (e.g. malformed body), so every key would fail the same way.
+        throw PegasusException(e.message);
+      } on PegasusException catch (e) {
+        // Anything else (5xx, network blip, timeout) is treated as
+        // retryable: move on to the next key rather than failing the whole
+        // request on one bad response.
+        lastError = e;
+        continue;
       }
     }
 
@@ -181,6 +197,15 @@ Pegasus; never mention Gemini or Google's model names.
 
     if (response.statusCode == 429) {
       throw _RateLimitException();
+    }
+
+    if (response.statusCode == 400 ||
+        response.statusCode == 401 ||
+        response.statusCode == 403) {
+      final raw = await response.stream.bytesToString();
+      throw _PermanentException(
+        'Pegasus API error (${response.statusCode}): ${_extractErrorMessage(raw)}',
+      );
     }
 
     if (response.statusCode != 200) {

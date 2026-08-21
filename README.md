@@ -179,6 +179,20 @@ installer/
 - Persists every user/assistant turn to Supabase (`ai_messages` table) per
   signed-in user, so history survives app restarts.
 
+## Full database reset
+
+`db/reset_and_recreate.sql` drops and recreates the entire Supabase schema
+from scratch, matching exactly what `lib/services/*.dart` and `lib/models/*.dart`
+actually query — table names, columns, foreign keys, the counters Pegasus and
+the feed rely on, and RLS policies for every table. It does **not** touch
+`auth.users`; a matching `profiles` row is auto-created via trigger the next
+time each account signs in.
+
+**This is destructive and irreversible** — it deletes every row in every
+table. Back up first if you have data worth keeping (Supabase Dashboard →
+Database → Backups). To run it: Supabase Dashboard → SQL Editor → New query →
+paste the file's contents → Run.
+
 ## Troubleshooting
 
 - **`flutter build windows` fails immediately** — you're missing the Visual
