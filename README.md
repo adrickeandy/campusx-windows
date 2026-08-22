@@ -66,7 +66,7 @@ notepad env.json
   "SUPABASE_ANON_KEY": "your_supabase_publishable_key",
   "GEMINI_API_KEY": "your_gemini_api_key",
   "GEMINI_API_KEYS": "",
-  "GEMINI_MODEL": "gemini-2.5-flash"
+  "GEMINI_MODEL": "gemini-3.5-flash-lite"
 }
 ```
 
