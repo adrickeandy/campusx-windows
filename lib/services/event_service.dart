@@ -11,7 +11,7 @@ class EventService {
         .from('events')
         .select('*')
         .gte('starts_at', nowIso)
-        .order('starts_at', { 'ascending': true });
+        .order('starts_at', ascending: true);
 
     final events = (data as List).map((json) => EventModel.fromJson(json as Map<String, dynamic>)).toList();
 
@@ -71,9 +71,10 @@ class EventService {
   Future<int> fetchRsvpCount(String eventId) async {
     final res = await _client
         .from('event_rsvps')
-        .select('*', const FetchOptions(count: CountOption.exact, head: true))
+        .select('id')
         .eq('event_id', eventId)
-        .eq('status', 'going');
+        .eq('status', 'going')
+        .count(CountOption.exact);
 
     return res.count ?? 0;
   }
