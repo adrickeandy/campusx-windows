@@ -12,7 +12,7 @@ class MarketplaceService {
       query = query.eq('category', category);
     }
 
-    final data = await query.order('created_at', { 'ascending': false });
+    final data = await query.order('created_at', ascending: false);
 
     return (data as List).map((json) => MarketplaceItemModel.fromJson(json as Map<String, dynamic>)).toList();
   }
