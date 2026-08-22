@@ -9,11 +9,11 @@ class AdminService {
 
   Future<Map<String, int>> fetchAdminStats() async {
     final results = await Future.wait([
-      _client.from('profiles').select('*', const FetchOptions(count: CountOption.exact, head: true)),
-      _client.from('posts').select('*', const FetchOptions(count: CountOption.exact, head: true)),
-      _client.from('reports').select('*', const FetchOptions(count: CountOption.exact, head: true)).eq('status', 'pending'),
-      _client.from('profiles').select('*', const FetchOptions(count: CountOption.exact, head: true)).eq('is_banned', true),
-      _client.from('messages').select('*', const FetchOptions(count: CountOption.exact, head: true)),
+      _client.from('profiles').select('id').count(CountOption.exact),
+      _client.from('posts').select('id').count(CountOption.exact),
+      _client.from('reports').select('id').eq('status', 'pending').count(CountOption.exact),
+      _client.from('profiles').select('id').eq('is_banned', true).count(CountOption.exact),
+      _client.from('messages').select('id').count(CountOption.exact),
     ]);
 
     return {
@@ -29,7 +29,7 @@ class AdminService {
     final data = await _client
         .from('profiles')
         .select('*')
-        .order('created_at', { 'ascending': false })
+        .order('created_at', ascending: false)
         .limit(100);
 
     return (data as List).map((json) => ProfileModel.fromJson(json as Map<String, dynamic>)).toList();
@@ -47,7 +47,7 @@ class AdminService {
     final data = await _client
         .from('posts')
         .select('*, profiles!posts_author_id_fkey(id, username, full_name, avatar_url, is_verified)')
-        .order('created_at', { 'ascending': false })
+        .order('created_at', ascending: false)
         .limit(50);
 
     return (data as List).map((json) => PostModel.fromJson(json as Map<String, dynamic>)).toList();
@@ -57,7 +57,7 @@ class AdminService {
     final data = await _client
         .from('reports')
         .select('*, profiles!reports_reporter_id_fkey(id, username, avatar_url), posts(*)')
-        .order('created_at', { 'ascending': false });
+        .order('created_at', ascending: false);
 
     return (data as List).map((json) => ReportModel.fromJson(json as Map<String, dynamic>)).toList();
   }
@@ -70,7 +70,7 @@ class AdminService {
     final data = await _client
         .from('feature_flags')
         .select('*')
-        .order('key', { 'ascending': true });
+        .order('key', ascending: true);
 
     return (data as List).map((json) => FeatureFlagModel.fromJson(json as Map<String, dynamic>)).toList();
   }
@@ -86,7 +86,7 @@ class AdminService {
     final data = await _client
         .from('admin_logs')
         .select('*')
-        .order('created_at', { 'ascending': false })
+        .order('created_at', ascending: false)
         .limit(50);
 
     return (data as List).map((json) => AdminLogModel.fromJson(json as Map<String, dynamic>)).toList();
