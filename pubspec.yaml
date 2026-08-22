@@ -38,5 +38,14 @@ dev_dependencies:
     sdk: flutter
   flutter_lints: ^3.0.0
 
+# supabase_flutter pulls in app_links transitively (for OAuth/magic-link
+# deep-link handling). Without this override, pub can resolve an old
+# app_links version that never shipped its Windows native implementation,
+# which breaks `flutter build windows` with a missing
+# app_links_plugin_c_api.h. Forcing a version confirmed to include the
+# fixed Windows setup.
+dependency_overrides:
+  app_links: ^6.4.1
+
 flutter:
   uses-material-design: true
