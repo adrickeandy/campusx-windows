@@ -71,13 +71,15 @@ class ProfileService {
   Future<Map<String, int>> fetchFollowCounts(String userId) async {
     final followersRes = await _client
         .from('follows')
-        .select('*', const FetchOptions(count: CountOption.exact, head: true))
-        .eq('following_id', userId);
+        .select('id')
+        .eq('following_id', userId)
+        .count(CountOption.exact);
 
     final followingRes = await _client
         .from('follows')
-        .select('*', const FetchOptions(count: CountOption.exact, head: true))
-        .eq('follower_id', userId);
+        .select('id')
+        .eq('follower_id', userId)
+        .count(CountOption.exact);
 
     return {
       'followers': followersRes.count ?? 0,
