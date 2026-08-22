@@ -18,7 +18,7 @@ class PostService {
         .from('posts')
         .select('*, profiles!posts_author_id_fkey(id, username, full_name, avatar_url, is_verified)')
         .eq('is_confession', false)
-        .order('created_at', { 'ascending': false })
+        .order('created_at', ascending: false)
         .range(from, to);
 
     final posts = (data as List).map((json) => PostModel.fromJson(json as Map<String, dynamic>)).toList();
@@ -43,7 +43,7 @@ class PostService {
         .from('posts')
         .select('*')
         .eq('is_confession', true)
-        .order('created_at', { 'ascending': false })
+        .order('created_at', ascending: false)
         .range(from, to);
 
     return (data as List).map((json) => PostModel.fromJson(json as Map<String, dynamic>)).toList();
@@ -54,7 +54,7 @@ class PostService {
         .from('posts')
         .select('*, profiles!posts_author_id_fkey(id, username, full_name, avatar_url, is_verified)')
         .eq('author_id', authorId)
-        .order('created_at', { 'ascending': false });
+        .order('created_at', ascending: false);
 
     final posts = (data as List).map((json) => PostModel.fromJson(json as Map<String, dynamic>)).toList();
 
@@ -127,7 +127,7 @@ class PostService {
         .from('comments')
         .select('*, profiles!comments_author_id_fkey(id, username, full_name, avatar_url)')
         .eq('post_id', postId)
-        .order('created_at', { 'ascending': true });
+        .order('created_at', ascending: true);
 
     return (data as List).map((json) => CommentModel.fromJson(json as Map<String, dynamic>)).toList();
   }
