@@ -9,7 +9,7 @@ class ClubService {
     final data = await _client
         .from('clubs')
         .select('*')
-        .order('created_at', { 'ascending': false });
+        .order('created_at', ascending: false);
 
     final clubs = (data as List).map((json) => ClubModel.fromJson(json as Map<String, dynamic>)).toList();
 
@@ -79,8 +79,9 @@ class ClubService {
   Future<int> fetchClubMemberCount(String clubId) async {
     final res = await _client
         .from('club_members')
-        .select('*', const FetchOptions(count: CountOption.exact, head: true))
-        .eq('club_id', clubId);
+        .select('id')
+        .eq('club_id', clubId)
+        .count(CountOption.exact);
 
     return res.count ?? 0;
   }
