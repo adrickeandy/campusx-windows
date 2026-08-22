@@ -67,7 +67,7 @@ class AppTheme {
       ),
     ),
     dividerColor: AppColors.darkGlassBorder,
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: AppColors.darkBg900.withOpacity(0.7),
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -141,7 +141,7 @@ class AppTheme {
       ),
     ),
     dividerColor: AppColors.lightGlassBorder,
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: Colors.white.withOpacity(0.9),
       elevation: 0,
       shape: RoundedRectangleBorder(
