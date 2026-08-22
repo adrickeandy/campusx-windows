@@ -53,7 +53,7 @@ class PegasusService {
         .from('ai_messages')
         .select('*')
         .eq('user_id', userId)
-        .order('created_at', { 'ascending': true })
+        .order('created_at', ascending: true)
         .limit(200);
 
     return (data as List)
