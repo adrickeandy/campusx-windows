@@ -60,16 +60,20 @@ class AppEnv {
 
   static const String geminiModel = String.fromEnvironment(
     'GEMINI_MODEL',
-    defaultValue: 'gemini-2.5-flash',
+    defaultValue: 'gemini-3.5-flash-lite',
   );
 
   static const String geminiBaseUrl =
       'https://generativelanguage.googleapis.com/v1beta/models';
 
-  /// Thinking budget in tokens for the Gemini "thinking" feature. 0 keeps
-  /// replies fast and cheap for a chat assistant; raise it later for
-  /// tasks that need deeper multi-step reasoning.
-  static const int geminiThinkingBudget = 0;
+  /// Thinking level for Gemini 3.x models: 'low' keeps Pegasus fast and
+  /// cheap for everyday chat; raise to 'medium'/'high' later for tasks that
+  /// need deeper multi-step reasoning. (Gemini 3.x replaced the old numeric
+  /// thinkingBudget with this string enum; 'minimal' is rejected by the API.)
+  static const String geminiThinkingLevel = String.fromEnvironment(
+    'GEMINI_THINKING_LEVEL',
+    defaultValue: 'low',
+  );
 
   /// Caps a single reply's length — keeps runaway responses (and runaway
   /// token bills) in check.
