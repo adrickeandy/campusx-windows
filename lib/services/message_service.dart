@@ -55,7 +55,7 @@ class MessageService {
         .from('messages')
         .select('*, profiles!messages_sender_id_fkey(id, username, full_name, avatar_url)')
         .eq('conversation_id', conversationId)
-        .order('created_at', { 'ascending': true });
+        .order('created_at', ascending: true);
 
     return (data as List).map((json) => MessageModel.fromJson(json as Map<String, dynamic>)).toList();
   }
