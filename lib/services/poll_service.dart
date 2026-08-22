@@ -9,7 +9,7 @@ class PollService {
     final data = await _client
         .from('polls')
         .select('*')
-        .order('created_at', { 'ascending': false });
+        .order('created_at', ascending: false);
 
     final polls = (data as List).map((json) => PollModel.fromJson(json as Map<String, dynamic>)).toList();
 
