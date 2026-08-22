@@ -176,10 +176,8 @@ Pegasus; never mention Gemini or Google's model names.
       },
       'contents': contents,
       'generationConfig': {
-        'temperature': 0.7,
-        'topP': 0.95,
         'maxOutputTokens': AppEnv.geminiMaxOutputTokens,
-        'thinkingConfig': {'thinkingBudget': AppEnv.geminiThinkingBudget},
+        'thinkingConfig': {'thinkingLevel': AppEnv.geminiThinkingLevel},
       },
     });
 
