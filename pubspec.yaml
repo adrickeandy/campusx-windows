@@ -45,7 +45,7 @@ dev_dependencies:
 # app_links_plugin_c_api.h. Forcing a version confirmed to include the
 # fixed Windows setup.
 dependency_overrides:
-  app_links: ^6.4.1
+  app_links: ^7.2.1
 
 flutter:
   uses-material-design: true
