@@ -85,6 +85,31 @@ notepad env.json
 flutter pub get
 ```
 
+## 3b. Generate the native Windows scaffold (first time only)
+
+The `windows/` platform folder isn't committed to this repo — it's
+version-sensitive native scaffolding (CMake, plugin registration, C++ runner)
+that should always come from your actual installed Flutter SDK rather than a
+hand-copied version, since it can silently drift out of sync with your SDK
+and cause confusing native build errors. Generate it once:
+
+```powershell
+flutter create --platforms=windows .
+```
+
+Then apply CampusX's branding on top of the freshly generated files:
+
+```powershell
+Copy-Item -Path "branding\app_icon.ico" -Destination "windows\runner\resources\app_icon.ico" -Force
+(Get-Content windows\CMakeLists.txt) -replace 'set\(BINARY_NAME ".*"\)', 'set(BINARY_NAME "CampusX")' | Set-Content windows\CMakeLists.txt
+(Get-Content windows\runner\main.cpp) -replace 'CreateAndShow\(L".*?",', 'CreateAndShow(L"CampusX",' | Set-Content windows\runner\main.cpp
+```
+
+You only need to redo this if you delete the `windows/` folder or want to
+pick up scaffold changes from a newer Flutter release. CI does this
+automatically on every run (see `.github/workflows/main.yml`), so you never
+need to commit the `windows/` folder to git — it's in `.gitignore`.
+
 ## 4. Run in development
 
 ```powershell
