@@ -10,7 +10,7 @@ class NotificationService {
         .from('notifications')
         .select('*, profiles!notifications_actor_id_fkey(id, username, avatar_url)')
         .eq('recipient_id', userId)
-        .order('created_at', { 'ascending': false })
+        .order('created_at', ascending: false)
         .limit(50);
 
     return (data as List).map((json) => NotificationModel.fromJson(json as Map<String, dynamic>)).toList();
